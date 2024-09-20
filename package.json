@@ -1,0 +1,15 @@
+{
+  "name": "your-project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js"
+  },
+  "dependencies": {
+    "axios": "^0.21.4",
+    "cheerio": "^1.0.0",
+    "dotenv": "^16.4.5",
+    "queue": "^7.0.0"
+  }
+}

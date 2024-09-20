@@ -1,0 +1,165 @@
+{
+    "categories": [
+      {
+        "id": "MLB5672",
+        "name": "Acessórios para Veículos",
+        "get": 35
+      },
+      {
+        "id": "MLB271599",
+        "name": "Agro",
+        "get": 30
+      },
+      {
+        "id": "MLB1403",
+        "name": "Alimentos e Bebidas",
+        "get": 55
+      },
+      {
+        "id": "MLB1071",
+        "name": "Animais",
+        "get": 35
+      },
+      {
+        "id": "MLB1367",
+        "name": "Antiguidades e Coleções",
+        "get": 25
+      },
+      {
+        "id": "MLB1368",
+        "name": "Arte, Papelaria e Armarinho",
+        "get": 35
+      },
+      {
+        "id": "MLB1384",
+        "name": "Bebês",
+        "get": 55
+      },
+      {
+        "id": "MLB1246",
+        "name": "Beleza e Cuidado Pessoal",
+        "get": 60
+      },
+      {
+        "id": "MLB1132",
+        "name": "Brinquedos e Hobbies",
+        "get": 20
+      },
+      {
+        "id": "MLB1430",
+        "name": "Calçados, Roupas e Bolsas",
+        "get": 75
+      },
+      {
+        "id": "MLB1039",
+        "name": "Câmeras e Acessórios",
+        "get": 20
+      },
+      {
+        "id": "MLB1743",
+        "name": "Carros, Motos e Outros",
+        "get": 20
+      },
+      {
+        "id": "MLB1574",
+        "name": "Casa, Móveis e Decoração",
+        "get": 35
+      },
+      {
+        "id": "MLB1051",
+        "name": "Celulares e Telefones",
+        "get": 60
+      },
+      {
+        "id": "MLB1500",
+        "name": "Construção",
+        "get": 25
+      },
+      {
+        "id": "MLB5726",
+        "name": "Eletrodomésticos",
+        "get": 60
+      },
+      {
+        "id": "MLB1000",
+        "name": "Eletrônicos, Áudio e Vídeo",
+        "get": 55
+      },
+      {
+        "id": "MLB1276",
+        "name": "Esportes e Fitness",
+        "get": 35
+      },
+      {
+        "id": "MLB263532",
+        "name": "Ferramentas",
+        "get": 35
+      },
+      {
+        "id": "MLB12404",
+        "name": "Festas e Lembrancinhas",
+        "get": 35
+      },
+      {
+        "id": "MLB1144",
+        "name": "Games",
+        "get": 60
+      },
+      {
+        "id": "MLB1459",
+        "name": "Imóveis",
+        "get": 35
+      },
+      {
+        "id": "MLB1499",
+        "name": "Indústria e Comércio",
+        "get": 35
+      },
+      {
+        "id": "MLB1648",
+        "name": "Informática",
+        "get": 35
+      },
+      {
+        "id": "MLB218519",
+        "name": "Ingressos",
+        "get": 35
+      },
+      {
+        "id": "MLB1182",
+        "name": "Instrumentos Musicais",
+        "get": 30
+      },
+      {
+        "id": "MLB3937",
+        "name": "Joias e Relógios",
+        "get": 30
+      },
+      {
+        "id": "MLB1196",
+        "name": "Livros, Revistas e Comics",
+        "get": 50
+      },
+      {
+        "id": "MLB1168",
+        "name": "Música, Filmes e Seriados",
+        "get": 30
+      },
+      {
+        "id": "MLB264586",
+        "name": "Saúde",
+        "get": 45
+      },
+      {
+        "id": "MLB1540",
+        "name": "Serviços",
+        "get": 35
+      },
+      {
+        "id": "MLB1953",
+        "name": "Mais Categorias",
+        "get": 35
+      }
+    ]
+  }
+  
