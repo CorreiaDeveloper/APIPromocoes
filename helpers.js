@@ -80,7 +80,7 @@ function addEmojis(headerMessage, category, discount) {
 
   if (randomChoice === 1) {
     const exclamationWords = [" SUPER", " INCRÍVEL"];
-    const discountWords = [" DESCONTO", " OFERTA", " PREÇO"];
+    const discountWords = ["DESCONTO", "OFERTA", "PREÇO"];
     const exclamationWord = exclamationWords[Math.floor(Math.random() * exclamationWords.length)];
     const discountWord = discountWords[Math.floor(Math.random() * discountWords.length)];
     finalMessage = `${exclamationWord} ${discountWord}`;
@@ -90,7 +90,7 @@ function addEmojis(headerMessage, category, discount) {
   }
 
 
-  return `📢⚠️¡${finalMessage}!\n\n${headerMessage} ${emojis[category] || ''}`;
+  return `📢⚠️ ${finalMessage}!\n\n${headerMessage} ${emojis[category] || ''}`;
 }
 
 module.exports = { acionarApiMercadoLivre, addEmojis };

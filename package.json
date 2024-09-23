@@ -10,6 +10,11 @@
     "axios": "^0.21.4",
     "cheerio": "^1.0.0",
     "dotenv": "^16.4.5",
-    "queue": "^7.0.0"
+    "queue": "^7.0.0",
+    "@atproto/api": "^0.13.6",
+    "@atproto/oauth-client": "^0.2.0",
+    "atproto-firehose": "^0.2.2",
+    "readline-sync": "^1.4.10",
+    "zod": "^3.23.8"
   }
 }

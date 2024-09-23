@@ -33,6 +33,11 @@ class Queue {
     size() {
         return this.items.length;
     }
+
+    // Limpa a fila (se necessário)
+    clear() {
+        this.items = [];
+    }
 }
 
 module.exports = Queue;
