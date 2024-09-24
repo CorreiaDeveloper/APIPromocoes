@@ -1,0 +1,10 @@
+MLB3698110641 - Erro desconhecido ao acionar a API.
+MLB3384450349 - Erro desconhecido ao acionar a API.
+MLB4222981110 - Este produto não atende aos requisitos do Programa.
+MLB4222981110 - Este produto não atende aos requisitos do Programa.
+MLB4222981110 - Erro ao gerar link de afiliado: 1008
+MLB4222981110 - errorCode is not defined
+MLB4222981110 - errorCode is not defined
+MLB4222981110 - Erro ao gerar link de afiliado: Este produto não atende aos requisitos do Programa. - 1008
+MLB4222981110 - Erro ao gerar link de afiliado: Este produto não atende aos requisitos do Programa. - 1008
+MLB4222981110 - Erro ao gerar link de afiliado: Este produto não atende aos requisitos do Programa. - 1008

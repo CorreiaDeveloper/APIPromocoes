@@ -27,10 +27,9 @@ async function acionarApiMercadoLivre(url, tag) {
   }
 }
 
-
 const emojis = {
   "MLB5672": "🚗", // Acessórios para Veículos
-  "MLB271599": "🎁", // Agro
+  "MLB271599": "🌱", // Agro
   "MLB1403": "🍔", // Alimentos e Bebidas
   "MLB1071": "🐶", // Animais
   "MLB1367": "🕰️", // Antiguidades e Coleções
@@ -40,51 +39,48 @@ const emojis = {
   "MLB1132": "🎲", // Brinquedos e Hobbies
   "MLB1430": "👗", // Calçados, Roupas e Bolsas
   "MLB1039": "📷", // Câmeras e Acessórios
-  "MLB1743": "🚗", // Carros, Motos e Outros (Usando o emoji de "Acessórios para Veículos" como exemplo)
-  "MLB1574": "🏡", // Casa, Móveis e Decoração
+  "MLB1743": "🏎️", // Carros, Motos e Outros (Emoji de carro esportivo para mais impacto)
+  "MLB1574": "🏠", // Casa, Móveis e Decoração
   "MLB1051": "📱", // Celulares e Telefones
-  "MLB1500": "🚧", // Construção
+  "MLB1500": "🔨", // Construção (Emoji de martelo, mais apropriado que "🚧")
   "MLB5726": "🔧", // Eletrodomésticos
   "MLB1000": "🎧", // Eletrônicos, Áudio e Vídeo
-  "MLB1276": "🏋️", // Esportes e Fitness
-  "MLB263532": "🔨", // Ferramentas (Emoji de ferramentas genérico, você pode ajustar conforme necessário)
+  "MLB1276": "🏋️‍♂️", // Esportes e Fitness (Inclui emoji de pessoa levantando peso)
+  "MLB263532": "🛠️", // Ferramentas
   "MLB12404": "🎉", // Festas e Lembrancinhas
   "MLB1144": "🎮", // Games
-  "MLB1459": "🏠", // Imóveis
+  "MLB1459": "🏡", // Imóveis (Emoji de casa com jardim)
   "MLB1499": "🏢", // Indústria e Comércio
   "MLB1648": "💻", // Informática
   "MLB218519": "🎫", // Ingressos
   "MLB1182": "🎸", // Instrumentos Musicais
-  "MLB3937": "⌚", // Joias e Relógios
+  "MLB3937": "💎", // Joias e Relógios (Emoji de diamante para maior valor)
   "MLB1196": "📚", // Livros, Revistas e Comics
-  "MLB1168": "🎥", // Música, Filmes e Seriados
-  "MLB264586": "💊", // Saúde (Emoji de saúde genérico, ajuste conforme necessário)
-  "MLB1540": "🛠️", // Serviços (Emoji de ferramentas como exemplo)
-  "MLB1953": "📦" // Mais Categorias (Emoji de caixa como exemplo)
+  "MLB1168": "🎬", // Música, Filmes e Seriados (Emoji de claquete de cinema)
+  "MLB264586": "💊", // Saúde (Emoji de pílula para saúde)
+  "MLB1540": "🔧", // Serviços (Já utilizado para serviços, manutenção)
+  "MLB1953": "📦" // Mais Categorias
 };
 
-
 function addEmojis(headerMessage, category, discount) {
-  if (discount < 30) {
-    return headerMessage;
-  }
+  // Define o emoji para a categoria
+  const categoryEmoji = emojis[category] || '';
 
-  const randomChoice = Math.floor(Math.random() * 2) + 1;
-  let finalMessage;
+  // Cria uma mensagem de desconto baseada no valor
+  const discountMessage = discount >= 50
+    ? `🎉🎉 MAIOR DESCONTO! ${discount}% OFF! 🎉🎉`
+    : '';
 
-  if (randomChoice === 1) {
-    const exclamationWords = [" SUPER", " INCRÍVEL"];
-    const discountWords = ["DESCONTO", "OFERTA", "PREÇO"];
-    const exclamationWord = exclamationWords[Math.floor(Math.random() * exclamationWords.length)];
-    const discountWord = discountWords[Math.floor(Math.random() * discountWords.length)];
-    finalMessage = `${exclamationWord} ${discountWord}`;
-  } else {
-    const errorMessages = [" ERRO DE PREÇO", " CORRA JÁ", " CORRA, RÁPIDO!", " NO MENOR PREÇO"];
-    finalMessage = errorMessages[Math.floor(Math.random() * errorMessages.length)];
-  }
+  // Cria uma mensagem de urgência ou exaltação
+  const urgencyMessages = [
+    "🚨 ATENÇÃO! NÃO PERCA!",
+    "🔥 OFERTA IMPERDÍVEL!",
+    "⚡ CORRA, É POR TEMPO LIMITADO!",
+    "🎯 OFERTA EXCLUSIVA, APROVEITE!"
+  ];
+  const randomUrgencyMessage = urgencyMessages[Math.floor(Math.random() * urgencyMessages.length)];
 
-
-  return `📢⚠️ ${finalMessage}!\n\n${headerMessage} ${emojis[category] || ''}`;
+  return `${randomUrgencyMessage}\n${discountMessage}\n${headerMessage} ${categoryEmoji}`;
 }
 
 module.exports = { acionarApiMercadoLivre, addEmojis };
