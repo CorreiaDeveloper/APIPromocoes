@@ -19,15 +19,9 @@ async function acionarApiMercadoLivre(url, tag) {
 
     const response = await axios.post(apiUrl, body, { headers });
 
-    // Extraindo o short_url da resposta
-    if (response.data.urls && response.data.urls.length > 0) {
-      return response.data.urls[0].short_url;  // Acessando o short_url do primeiro item
-    } else {
-      console.error("Nenhum URL de afiliado retornado");
-      return null;
-    }
-
-  } catch (error) {
+    return response.data;
+  }
+  catch (error) {
     console.error("Erro ao acionar a API:", error.response ? error.response.data : error.message);
     return null;
   }

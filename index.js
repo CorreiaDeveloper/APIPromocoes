@@ -7,6 +7,26 @@ const Queue = require('./queue.js');
 require('dotenv').config();
 
 const PUBLISHED_PRODUCTS_FILE = './published_products.txt'; // Caminho do arquivo para armazenar os produtos publicados
+const IGNORED_PRODUCTS_FILE = './ignoredProducts.txt'; // Caminho do arquivo para armazenar os produtos ignorados
+
+const errors = {
+    100: "Esta URL não é do Mercado Livre.",
+    101: "Formato de URL inválido.",
+    102: "Esta URL contém um erro. Copie-a novamente.",
+    107: "O campo está vazio. Insira a URL que você deseja promover.",
+    108: "Esta URL não é do Mercado Livre {0}.",
+    110: "Esta URL não corresponde a um produto.",
+    111: "Esta URL não é permitida no Programa.",
+    115: "Esta URL corresponde a um produto usado.",
+    116: "Você não pode gerar links de uma URL encurtada.",
+    1001: "Esta URL não corresponde a um produto.",
+    1002: "Esta URL corresponde a um produto usado.",
+    1003: "Esta URL corresponde a um produto sem preço.",
+    1004: "Esta URL corresponde a um produto pausado.",
+    1005: "Esta URL corresponde a um produto sem foto.",
+    1006: "O vendedor tem reputação vermelha ou laranja.",
+    1008: "Este produto não atende aos requisitos do Programa."
+};
 
 class MercadoLibre {
     constructor() {
@@ -17,6 +37,7 @@ class MercadoLibre {
         this.productQueue = new Queue();
         this.lastPostTime = 0; 
         this.POST_INTERVAL = 15 * 60 * 1000; 
+        this.ignoredProducts = new Set(); // Conjunto para armazenar produtos ignorados
     }
 
     async fetchProducts(category) {
@@ -38,7 +59,7 @@ class MercadoLibre {
                 const products = data.results || [];
 
                 const newProducts = products.filter(product => {
-                    return this.isDiscounted(product) && this.discountThreshold(product);
+                    return this.isDiscounted(product) && this.discountThreshold(product) && !this.ignoredProducts.has(product.id);
                 });
 
                 newProducts.forEach(product => {
@@ -66,10 +87,10 @@ class MercadoLibre {
         const discountPercentage = Math.round(100 - (price * 100 / originalPrice));
 
         return (
-            (price < 500 && discountPercentage >= 50) ||
-            (price >= 500 && price < 2000 && discountPercentage >= 40) ||
-            (price >= 2000 && price < 10000 && discountPercentage >= 50) ||
-            (price >= 10000 && discountPercentage >= 20)
+            (price < 500 && discountPercentage >= 30) ||
+            (price >= 500 && price < 2000 && discountPercentage >= 25) ||
+            (price >= 2000 && price < 10000 && discountPercentage >= 20) ||
+            (price >= 10000 && discountPercentage >= 10)
         );
     }
 
@@ -95,38 +116,49 @@ class MercadoLibre {
             console.log('Ainda não é hora de postar. Aguardando o próximo intervalo.');
             return;
         }
-
+    
         const product = await this.getUniqueProduct();
         if (!product) {
             console.log('Nenhum produto novo para publicar.');
             return;
         }
-
+    
         const discount = Math.round(100 - (product.price * 100 / product.original_price));
-
+    
         product.price = Math.round(product.price);
         product.original_price = Math.round(product.original_price);
-
-        const affiliateLink = await acionarApiMercadoLivre(product.permalink, 'correiashop');
-        const hasCoupon = await this.isCoupon(product.permalink);
-
-        if (!affiliateLink) {
-            console.error(`Erro ao gerar link de afiliado para o produto: ${product.id}`);
-            return;
+    
+        const affiliateLinkResponse = await acionarApiMercadoLivre(product.permalink, 'correiashop');
+        
+        if (affiliateLinkResponse) {
+            if (affiliateLinkResponse.status === 200 && affiliateLinkResponse.total_error === 0) {
+                const affiliateLink = affiliateLinkResponse.urls[0].short_url; // Ajuste se a estrutura da resposta for diferente
+                const hasCoupon = await this.isCoupon(product.permalink);
+    
+                const header = addEmojis(product.title, product.category_id, discount);
+                const message = `${header}\n\nDe R$${product.original_price} Por R$${product.price} - ${discount}% De desconto!!\n${product.shipping?.free_shipping ? '🚚 (Frete Grátis)\n' : ''}${hasCoupon ? `Cupom na tela: ${hasCoupon} 🎟\n` : ''}\n${affiliateLink}`;
+    
+                const imageUrl = product.thumbnail.replace(/\.jpg|\.png|\.jpeg/, 'C$&');
+                await this.postToBsky(message, imageUrl, product.title);
+    
+                // Salvando o produto no arquivo
+                await this.savePublishedProduct(product.id);
+    
+                // Atualiza o tempo da última postagem
+                this.lastPostTime = now;
+            } else {
+                const errorCode = affiliateLinkResponse.urls[0].error_code;
+                const errorMessage = errors[errorCode] || 'Erro desconhecido.';
+                console.error(`Erro ao gerar link de afiliado: ${errorMessage}`);
+                this.ignoredProducts.add(product.id);
+                await this.saveIgnoredProduct(product.id, errorMessage);
+            }
+        } else {
+            console.error('Erro ao acionar a API de Mercado Livre.');
+            this.ignoredProducts.add(product.id);
+            await this.saveIgnoredProduct(product.id, 'Erro desconhecido ao acionar a API.');
         }
-
-        const header = addEmojis(product.title, product.category_id, discount);
-        const message = `${header}\n\nDe R$${product.original_price} Por R$${product.price} - ${discount}% De desconto!!\n${product.shipping?.free_shipping ? '🚚 (Frete Grátis)\n' : ''}${hasCoupon ? `Cupom na tela: ${hasCoupon} 🎟\n` : ''}\n${affiliateLink}`;
-
-        const imageUrl = product.thumbnail.replace(/\.jpg|\.png|\.jpeg/, 'C$&');
-        await this.postToBsky(message, imageUrl, product.title);
-
-        // Salvando o produto no arquivo
-        await this.savePublishedProduct(product.id);
-
-        // Atualiza o tempo da última postagem
-        this.lastPostTime = now;
-    }
+    }    
 
     async getUniqueProduct() {
         while (!this.productQueue.isEmpty()) {
@@ -157,6 +189,14 @@ class MercadoLibre {
             await fs.appendFile(PUBLISHED_PRODUCTS_FILE, `${productId}\n`);
         } catch (err) {
             console.log('Erro ao salvar o produto no arquivo:', err);
+        }
+    }
+
+    async saveIgnoredProduct(productId, reason) {
+        try {
+            await fs.appendFile(IGNORED_PRODUCTS_FILE, `${productId} - ${reason}\n`);
+        } catch (err) {
+            console.log('Erro ao salvar o produto ignorado no arquivo:', err);
         }
     }
 
@@ -233,4 +273,5 @@ async function botHandler() {
 // Função para rodar o bot a cada 15 minutos
 setInterval(botHandler, 15 * 60 * 1000);
 
+// Executa imediatamente
 botHandler();
